@@ -3,7 +3,50 @@ import authSvg from 'assets/reset.svg';
 import { ToastContainer, toast } from 'react-toastify';
 import axios from 'axios';
 const ResetPassword = ({ match }) => {
-  //
+  const [formData, setFormData] = useState({
+    password1: '',
+    password2: '',
+    token: '',
+    textChange: 'Submit',
+  });
+  const { password1, password2, textChange, token } = formData;
+
+  useEffect(() => {
+    let token = match.params.token;
+    if (token) {
+      setFormData({ ...formData, token });
+    }
+  }, []);
+  const handleChange = (text) => (e) => {
+    setFormData({ ...formData, [text]: e.target.value });
+  };
+  const handleSubmit = (e) => {
+    console.log(password1, password2);
+    e.preventDefault();
+    if (password1 === password2 && password1 && password2) {
+      setFormData({ ...formData, textChange: 'Submitting' });
+      axios
+        .put(`${process.env.REACT_APP_API_URL}/password/reset`, {
+          newPassword: password1,
+          resetPasswordLink: token,
+        })
+        .then((res) => {
+          console.log(res.data.message);
+          setFormData({
+            ...formData,
+            password1: '',
+            password2: '',
+          });
+          toast.success(res.data.message);
+        })
+        .catch((err) => {
+          toast.error('Something is wrong try again');
+        });
+    } else {
+      toast.error("Passwords don't matches");
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gray-100 text-gray-900 flex justify-center">
       <ToastContainer />
@@ -16,7 +59,7 @@ const ResetPassword = ({ match }) => {
                 <input
                   className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white"
                   type="password"
-                  placeholder="password"
+                  placeholder="Password"
                   onChange={handleChange('password1')}
                   value={password1}
                 />
