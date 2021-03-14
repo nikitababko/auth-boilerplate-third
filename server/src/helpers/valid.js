@@ -2,7 +2,7 @@
 const { check } = require('express-validator');
 
 // Register
-exports.validSign = [
+exports.registerValidator = [
   check('name', 'Name is required')
     .notEmpty()
     .isLength({
@@ -22,7 +22,7 @@ exports.validSign = [
 ];
 
 // login
-exports.validLogin = [
+exports.loginValidator = [
   check('email').isEmail().withMessage('Must be a valid email address'),
   check('password', 'password is required').notEmpty(),
   check('password')
