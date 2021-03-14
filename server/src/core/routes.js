@@ -3,16 +3,18 @@ const AuthController = require('../controllers/AuthController');
 
 // Import validations helpers
 const {
-  validSign,
-  validLogin,
+  registerValidator,
+  loginValidator,
   forgotPasswordValidator,
   resetPasswordValidator,
 } = require('../helpers/valid');
 
 const createRoutes = (app) => {
-  app.post('/api/register', validSign, AuthController.register);
-  app.post('/api/login', validSign, AuthController.login);
+  app.post('/api/register', registerValidator, AuthController.register);
+  app.post('/api/login', loginValidator, AuthController.login);
   app.post('/api/activation', AuthController.activation);
+  app.put('/api/password/forgot', forgotPasswordValidator, AuthController.forgotPassword);
+  app.put('/api/password/reset', resetPasswordValidator, AuthController.resetPassword);
 };
 
 module.exports = createRoutes;
