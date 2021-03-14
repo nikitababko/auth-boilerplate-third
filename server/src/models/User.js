@@ -1,8 +1,8 @@
 const mongoose = require('mongoose');
 const crypto = require('crypto');
-const { timeStamp } = require('console');
 
-const UserSchema = new mongoose.Schema(
+// User schema
+const UserScheama = new mongoose.Schema(
   {
     email: {
       type: String,
@@ -23,22 +23,23 @@ const UserSchema = new mongoose.Schema(
     salt: String,
     role: {
       type: String,
-      default: 'Normal',
-      // We have more type (normal, admin ...)
+      default: 'subscriber',
+      // We have more type (subscriber, admin ...)
     },
     resetPasswordLink: {
       data: String,
       default: '',
     },
   },
-  { timeStamp: true }
+  {
+    timestamps: true,
+  }
 );
 
-// Virtual password
-UserSchema.virtual('password')
+// Virtual
+UserScheama.virtual('password')
   .set(function (password) {
-    // set password note you must use normal not arrow function
-    this.password = password;
+    this._password = password;
     this.salt = this.makeSalt();
     this.hashed_password = this.encryptPassword(password);
   })
@@ -46,14 +47,14 @@ UserSchema.virtual('password')
     return this._password;
   });
 
-// Methods
-UserSchema.methods = {
-  // General salt
-  makeSalt: function () {
-    return Math.round(new Data().valueOf() * Math.random()) + '';
+// methods
+UserScheama.methods = {
+  authenticate: function (plainText) {
+    return this.encryptPassword(plainText) === this.hashed_password;
   },
+
   // Encrypt password
-  encryptPassword: function () {
+  encryptPassword: function (password) {
     if (!password) return '';
     try {
       return crypto.createHmac('sha1', this.salt).update(password).digest('hex');
@@ -61,10 +62,11 @@ UserSchema.methods = {
       return '';
     }
   },
-  // Compare password between plain get from user and hashed
-  authenticate: function (plainPassword) {
-    return this.encryptPassword(plainPassword) === this.hashed_password;
+
+  // Generate salt
+  makeSalt: function () {
+    return Math.round(new Date().valueOf() * Math.random()) + '';
   },
 };
 
-module.exports = mongoose.model('User', UserSchema);
+module.exports = mongoose.model('User', UserScheama);
