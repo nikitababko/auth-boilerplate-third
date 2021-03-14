@@ -81,6 +81,10 @@ const Login = ({ history }) => {
               password1: '',
               textChange: 'Submitted',
             });
+            /**
+             * If authenticate but not admin redirect to /private
+             * If admin redirect to /admin
+             */
             isAuth() && isAuth().role === 'admin'
               ? history.push('/admin')
               : history.push('/private');
@@ -109,7 +113,7 @@ const Login = ({ history }) => {
       <div className="max-w-screen-xl m-0 sm:m-20 bg-white shadow sm:rounded-lg flex justify-center flex-1">
         <div className="lg:w-1/2 xl:w-5/12 p-6 sm:p-12">
           <div className="mt-12 flex flex-col items-center">
-            <h1 className="text-2xl xl:text-3xl font-extrabold">Sign In for Congar</h1>
+            <h1 className="text-2xl xl:text-3xl font-extrabold">Sign In</h1>
             <div className="w-full flex-1 mt-8 text-indigo-500">
               <div className="flex flex-col items-center">
                 <GoogleLogin
@@ -185,10 +189,10 @@ const Login = ({ history }) => {
                   <span className="ml-3">Sign In</span>
                 </button>
                 <Link
-                  to="/users/password/forget"
+                  to="/users/password/forgot"
                   className="no-underline hover:underline text-indigo-500 text-md text-right absolute right-0  mt-2"
                 >
-                  Forget password?
+                  Forgot password?
                 </Link>
               </form>
             </div>
