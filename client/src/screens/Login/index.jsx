@@ -8,6 +8,100 @@ import { GoogleLogin } from 'react-google-login';
 import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props';
 
 const Login = ({ history }) => {
+  const [formData, setFormData] = useState({
+    email: '',
+    password1: '',
+    textChange: 'Sign In',
+  });
+  const { email, password1, textChange } = formData;
+  const handleChange = (text) => (e) => {
+    setFormData({ ...formData, [text]: e.target.value });
+  };
+
+  const sendGoogleToken = (tokenId) => {
+    axios
+      .post(`${process.env.REACT_APP_API_URL}/googlelogin`, {
+        idToken: tokenId,
+      })
+      .then((res) => {
+        console.log(res.data);
+        informParent(res);
+      })
+      .catch((error) => {
+        console.log('GOOGLE SIGNIN ERROR', error.response);
+      });
+  };
+  const informParent = (response) => {
+    authenticate(response, () => {
+      isAuth() && isAuth().role === 'admin'
+        ? history.push('/admin')
+        : history.push('/private');
+    });
+  };
+
+  const sendFacebookToken = (userID, accessToken) => {
+    axios
+      .post(`${process.env.REACT_APP_API_URL}/facebooklogin`, {
+        userID,
+        accessToken,
+      })
+      .then((res) => {
+        console.log(res.data);
+        informParent(res);
+      })
+      .catch((error) => {
+        console.log('GOOGLE SIGNIN ERROR', error.response);
+      });
+  };
+  const responseGoogle = (response) => {
+    console.log(response);
+    sendGoogleToken(response.tokenId);
+  };
+
+  const responseFacebook = (response) => {
+    console.log(response);
+    sendFacebookToken(response.userID, response.accessToken);
+  };
+
+  const handleSubmit = (e) => {
+    console.log(process.env.REACT_APP_API_URL);
+    e.preventDefault();
+    if (email && password1) {
+      setFormData({ ...formData, textChange: 'Submitting' });
+      axios
+        .post(`${process.env.REACT_APP_API_URL}/login`, {
+          email,
+          password: password1,
+        })
+        .then((res) => {
+          authenticate(res, () => {
+            setFormData({
+              ...formData,
+              email: '',
+              password1: '',
+              textChange: 'Submitted',
+            });
+            isAuth() && isAuth().role === 'admin'
+              ? history.push('/admin')
+              : history.push('/private');
+            toast.success(`Hey ${res.data.user.name}, Welcome back!`);
+          });
+        })
+        .catch((err) => {
+          setFormData({
+            ...formData,
+            email: '',
+            password1: '',
+            textChange: 'Sign In',
+          });
+          console.log(err.response);
+          toast.error(err.response.data.errors);
+        });
+    } else {
+      toast.error('Please fill all fields');
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gray-100 text-gray-900 flex justify-center">
       {isAuth() ? <Redirect to="/" /> : null}
