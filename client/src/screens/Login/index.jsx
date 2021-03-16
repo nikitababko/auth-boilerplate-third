@@ -18,6 +18,7 @@ const Login = ({ history }) => {
     setFormData({ ...formData, [text]: e.target.value });
   };
 
+  // Send google token
   const sendGoogleToken = (tokenId) => {
     axios
       .post(`${process.env.REACT_APP_API_URL}/googlelogin`, {
@@ -31,6 +32,8 @@ const Login = ({ history }) => {
         console.log('GOOGLE SIGNIN ERROR', error.response);
       });
   };
+
+  // If success we need to authenticate user and redirect
   const informParent = (response) => {
     authenticate(response, () => {
       isAuth() && isAuth().role === 'admin'
