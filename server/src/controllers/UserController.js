@@ -1,7 +1,7 @@
 const User = require('../models/auth.model');
 const expressJwt = require('express-jwt');
 
-exports.readController = (req, res) => {
+exports.read = (req, res) => {
   const userId = req.params.id;
   User.findById(userId).exec((err, user) => {
     if (err || !user) {
@@ -15,7 +15,7 @@ exports.readController = (req, res) => {
   });
 };
 
-exports.updateController = (req, res) => {
+exports.update = (req, res) => {
   // console.log('UPDATE USER - req.user', req.user, 'UPDATE DATA', req.body);
   const { name, password } = req.body;
 
