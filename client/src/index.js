@@ -9,9 +9,10 @@ import {
   Register,
   ForgotPassword,
   ResetPassword,
-  Private,
   Admin,
+  Private,
 } from './screens';
+import { AdminRoute, PrivateRoute } from 'routes';
 
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -36,8 +37,8 @@ ReactDOM.render(
         path="/users/password/forgot"
         render={(props) => <ForgotPassword {...props} />}
       />
-      <Route exact path="/private" component={Private} />
-      <Route exact path="/admin" component={Admin} />
+      <PrivateRoute exact path="/private" component={Private} />
+      <AdminRoute exact path="/admin" component={Admin} />
       <Redirect to="/" />
     </Switch>
   </Router>,
