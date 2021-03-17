@@ -208,7 +208,6 @@ const Login = ({ history }) => {
           ></div>
         </div>
       </div>
-      ;
     </div>
   );
 };
