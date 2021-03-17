@@ -17,6 +17,7 @@ const createRoutes = (app) => {
   app.put('/api/password/reset', resetPasswordValidator, AuthController.resetPassword);
 
   app.post('/api/googlelogin', AuthController.googleLogin);
+  app.post('/api/facebooklogin', AuthController.facebookLogin);
 };
 
 module.exports = createRoutes;
