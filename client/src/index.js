@@ -36,8 +36,8 @@ ReactDOM.render(
         path="/users/password/forgot"
         render={(props) => <ForgotPassword {...props} />}
       />
-      <PrivateRoute path="/private" exact component={Private} />
-      <AdminRoute path="/admin" exact component={Admin} />
+      <Route exact path="/private" component={Private} />
+      <Route exact path="/admin" component={Admin} />
       <Redirect to="/" />
     </Switch>
   </Router>,
