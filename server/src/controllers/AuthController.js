@@ -1,4 +1,3 @@
-const expressJWT = require('express-jwt');
 const _ = require('lodash');
 const { OAuth2Client } = require('google-auth-library');
 const fetch = require('node-fetch');
