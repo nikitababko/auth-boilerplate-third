@@ -1,5 +1,10 @@
 // Load controllers
 const AuthController = require('../controllers/AuthController');
+const UserController = require('../controllers/UserController');
+
+// const { requireLogin } = require('../middlewares/requireLogin');
+const { adminMiddleware } = require('../middlewares/admin');
+const { requireLogin } = require('../middlewares/requireLogin');
 
 // Import validations helpers
 const {
@@ -18,6 +23,10 @@ const createRoutes = (app) => {
 
   app.post('/api/googlelogin', AuthController.googleLogin);
   app.post('/api/facebooklogin', AuthController.facebookLogin);
+
+  app.get('/api/user/:id', requireLogin, UserController.read);
+  app.put('/api/user/update', requireLogin, UserController.update);
+  app.put('/api/admin/update', requireLogin, adminMiddleware, UserController.update);
 };
 
 module.exports = createRoutes;
