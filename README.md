@@ -6,6 +6,7 @@
 
 - Authentication with:
 
+  - Email
   - Facebook
   - Google,
 
@@ -82,6 +83,32 @@ Received APP KEY paste to `client/.env` => `REACT_APP_GOOGLE_CLIENT=` and to `se
 5. Copy your ID app and paste it to `server/src/config/config.env` => `REACT_APP_FACEBOOK_CLIENT=`.
 
    ![](screenshots/instruction/facebook-4.png)
+
+## Built With
+
+### Frontend
+
+- ReactJS + hooks
+- React-router-dom
+- PropTypes
+- Axios
+- React-facebook-login
+- React-google-login
+
+### Backend
+
+- NodeJS / Express
+- MongoDB / Mongoose
+- Cors
+- Crypto
+- JsonWebToken
+- JWT
+- Express-jwt
+- Express-validator
+- Google-auth-library
+- Lodash
+- Morgan
+- Node-fetch
 
 ## <a name="screenshots">Screenshots</a>
 
