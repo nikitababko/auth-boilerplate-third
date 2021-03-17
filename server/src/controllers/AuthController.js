@@ -49,7 +49,7 @@ exports.register = (req, res) => {
       },
       process.env.JWT_ACCOUNT_ACTIVATION,
       {
-        expiresIn: process.env.JWT_MAX_AGE,
+        expiresIn: '15m',
       }
     );
 
