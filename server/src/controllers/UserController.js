@@ -1,4 +1,4 @@
-const User = require('../models/auth.model');
+const User = require('../models/User');
 const expressJwt = require('express-jwt');
 
 exports.read = (req, res) => {
