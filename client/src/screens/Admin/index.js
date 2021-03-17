@@ -6,7 +6,72 @@ import { updateUser, isAuth, getCookie, signout } from 'helpers/auth';
 import { Link, Redirect } from 'react-router-dom';
 
 const Admin = ({ history }) => {
-  //
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    password1: '',
+    textChange: 'Update',
+    role: '',
+  });
+
+  useEffect(() => {
+    loadProfile();
+  }, []);
+
+  const loadProfile = () => {
+    const token = getCookie('token');
+    axios
+      .get(`${process.env.REACT_APP_API_URL}/user/${isAuth()._id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((res) => {
+        const { role, name, email } = res.data;
+        setFormData({ ...formData, role, name, email });
+      })
+      .catch((err) => {
+        toast.error(`Error To Your Information ${err.response.statusText}`);
+        if (err.response.status === 401) {
+          signout(() => {
+            history.push('/login');
+          });
+        }
+      });
+  };
+  const { name, email, password1, textChange, role } = formData;
+  const handleChange = (text) => (e) => {
+    setFormData({ ...formData, [text]: e.target.value });
+  };
+  const handleSubmit = (e) => {
+    const token = getCookie('token');
+    console.log(token);
+    e.preventDefault();
+    setFormData({ ...formData, textChange: 'Submitting' });
+    axios
+      .put(
+        `${process.env.REACT_APP_API_URL}/admin/update`,
+        {
+          name,
+          email,
+          password: password1,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
+      .then((res) => {
+        updateUser(res, () => {
+          toast.success('Profile Updated Successfully');
+          setFormData({ ...formData, textChange: 'Update' });
+        });
+      })
+      .catch((err) => {
+        console.log(err.response);
+      });
+  };
 
   return (
     <div className="min-h-screen bg-gray-100 text-gray-900 flex justify-center">
